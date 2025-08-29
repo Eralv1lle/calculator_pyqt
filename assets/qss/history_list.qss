@@ -1,0 +1,68 @@
+QListWidget {
+    background-color: rgb(75, 85, 100);
+    color: rgb(230, 230, 230);
+    border: 2px solid rgb(100, 110, 125);
+    font-size: 16px;
+    border-radius: 7px;
+    padding: 5px;
+}
+
+QListWidget::item {
+    border-bottom: 1px solid rgb(100, 110, 125);
+    padding: 6px;
+}
+
+QListWidget::item:selected {
+    background-color: rgb(100, 120, 140);
+    color: white;
+}
+
+QListWidget::item:hover {
+    background-color: rgb(85, 95, 110);
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: rgb(60, 70, 85);
+    width: 6px;
+    margin: 0px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgb(120, 130, 150);
+    min-height: 20px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgb(150, 160, 180);
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background: rgb(60, 70, 85);
+    height: 6px;
+    margin: 0px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:horizontal {
+    background: rgb(120, 130, 150);
+    min-width: 20px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: rgb(150, 160, 180);
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}

@@ -1,0 +1,14 @@
+QPushButton {
+    background-color: rgb(100, 110, 125);
+    color: rgb(240, 240, 240);
+    font-size: 24px;
+    border-radius: 7px;
+}
+
+QPushButton:hover {
+    background-color: rgb(120, 140, 160);
+}
+
+QPushButton:pressed {
+    background-color: rgb(100, 120, 140);
+}
