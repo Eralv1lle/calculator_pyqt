@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QGridLayout, QWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 
+from math import ceil, floor
+
 from config import WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_OPACITY
 from app.styles import Styles
 from app.widgets import Label, Button, HistoryList
@@ -20,6 +22,8 @@ class Calculator(QMainWindow):
         self.setWindowOpacity(WINDOW_OPACITY)
         self.setStyleSheet(Styles.WINDOW)
         self.setWindowIcon(QIcon("../assets/images/calculator.png"))
+
+        self.max_chars = 18
 
         self.init_ui()
 
@@ -58,7 +62,7 @@ class Calculator(QMainWindow):
             (1, 3, "-"),
             (2, 3, "*"),
             (3, 3, "/"),
-            (4, 0, "B", self.backspace)
+            (4, 0, "⌫", self.backspace)
         ]
         for row, col, n, *other in btns_operations:
             btn = Button(n, Styles.BUTTON_OPERATION, (other[0] if other else self.add_operation))
@@ -83,12 +87,16 @@ class Calculator(QMainWindow):
         if self.result_text.text() == "0" and num != ".":
             self.result_text.setText("")
 
-        if len(self.result_text.text()) <= 19:
+        if len(self.result_text.text()) <= self.max_chars:
             self.result_text.setText(self.result_text.text() + num)
 
     def add_operation(self):
         btn = self.sender()
         operation = btn.text()
+
+        if self.result_text.text()[-1] in ["/", "*", "+", "-"] and self.result_text.text()[-1] != operation:
+            self.result_text.setText(self.result_text.text()[:-1] + operation)
+            return
 
         if self.result_text.text()[-1] in ["/", "*", "+", "-"]:
             return
@@ -98,13 +106,16 @@ class Calculator(QMainWindow):
                 self.result_text.setText(self.result_text.text() + operation)
                 return
 
-        if len(self.result_text.text()) <= 19:
+        if len(self.result_text.text()) <= self.max_chars:
             self.result_text.setText(self.result_text.text() + operation)
 
     def root(self):
         if self.result_text.text() != "0":
             try:
-                self.result_text.setText(str(eval(self.result_text.text()) ** 0.5))
+                text = self.result_text.text()
+                result = str(eval(text) ** 0.5)
+                self.result_text.setText(result)
+                self.history_list.add_item(f"√{text} = {result}")
             except Exception as err:
                 print(f"E: {err}")
 
@@ -137,4 +148,18 @@ class Calculator(QMainWindow):
 
     def c(self):
         self.result_text.setText("0")
+
+    @staticmethod
+    def my_round(num):
+        if num - int(num) >= 0.5:
+            return ceil(num)
+        return floor(num)
+
+    def update_max_chars(self):
+        width = self.width()
+        self.max_chars = max(5, self.my_round(width / (320 / 19)))
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_max_chars()
 
